@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+
+
+
+:root {
+  font-family: "Inter", sans-serif;
+    font-optical-sizing: auto;
+   background-color: black;
+   color: whitesmoke;
+    
+}
+
+.brder{
+  border: 0.1px solid rgb(59, 59, 59) ;
+}
+
+*{
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+html,body{
+  width: 100%;
+  height: 100%;
+}
+
+#tasklst::-webkit-scrollbar{
+  display: none;
+  
+}
