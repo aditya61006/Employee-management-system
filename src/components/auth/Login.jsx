@@ -1,15 +1,33 @@
 import React, { useState } from 'react';
 
-const Login = () => {
-
+const Login = ({value}) => {
+    const {setUser}  = value
     const [email,setEmail] = useState('')
     const [password,setPassword] = useState('')
 
       const submithandler = (e)=>{
             e.preventDefault()
             console.log("email : ",email,"    password : ",password)
+
+            if (email == "user@me.com" && password == "123") {
+                console.log("you are Employee")
+                setUser("Employee")
+            }
+            else  if (email == "admin@me.com" && password == "123") {
+                console.log("you are Employee")
+                setUser("Admin")}
+                else{
+                    alert("Invalid Credintals")
+                }
+                
+
+                
+            
+ 
+
             setEmail("")
             setPassword("")
+
         }
 
     return (
