@@ -42,7 +42,7 @@ const Header = ({setUser, data}) => {
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
                 <h1 className="text-xl sm:text-2xl font-semibold">
                     Hello <br className="block sm:hidden" />
-                    <span className="text-2xl sm:text-3xl">
+                    <span className="text-2xl sm:text-3xl ml-2">
                         {data?.name ? data.name : "ADMIN"}👋
                     </span>
                 </h1>
