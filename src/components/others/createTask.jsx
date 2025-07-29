@@ -8,10 +8,31 @@ const CreateTask = () => {
         const [assignto, setAssignto] = useState('');
         const [category, setcategory] = useState('');
 
+        const [task, setTask] = useState({});
 
         const submitHandler = (e)=>{
             e.preventDefault()
-            console.log(title,date,Description,assignto,category)
+            setTask({active:false,category,completed: false,date,Description,failed: false,newTask:true,title})
+        
+
+            const data = JSON.parse(localStorage.getItem('employees'))
+            console.log(data)
+            let userexist = false
+
+            data.forEach(element => {
+                 if (assignto.toLowerCase() === (element.name).toLowerCase()) {
+                    element.tasks.push(task)
+                    element.taskCount.newTask++
+                    console.log(element)
+                    userexist = true
+                    localStorage.setItem("employees",JSON.stringify(data))
+                 }
+             
+            });
+
+                 if (!userexist) {
+                    alert("User does'nt exist")
+                  }  
             
             settitle('')
             setDate('')

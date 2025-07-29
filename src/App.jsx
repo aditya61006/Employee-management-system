@@ -14,7 +14,7 @@ function App() {
 
 useEffect(() => {
    const who = localStorage.getItem('logInUser') 
-    console.log("hi its me local storage call")
+
    if(who ){
     if (who == "Employee") {
       setUser(who)
@@ -40,8 +40,8 @@ useEffect(() => {
     
        
 { User == "Employee" &&  <EmployeeDashboard employeeDta={employeeDta} setUser = {setUser} /> }
-      { User == "Admin"  &&<AdminDashboard setUser = {setUser}   /> }
        
+      { User == "Admin"  &&<AdminDashboard setUser = {setUser}   /> }
     
     </>
   )

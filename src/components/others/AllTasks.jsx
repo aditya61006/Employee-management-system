@@ -4,7 +4,7 @@ import { AuthContext } from '../../context/AuthProvider';
 const AllTasks = () => {
 
         const authdata = useContext(AuthContext);
-        console.log(authdata)
+     
 
     return ( <div>
        
