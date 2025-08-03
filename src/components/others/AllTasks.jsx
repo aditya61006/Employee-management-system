@@ -1,8 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext ,useState,useEffect} from 'react';
 import { AuthContext } from '../../context/AuthProvider';
 
-const AllTasks = () => {
+const AllTasks = ({refresh}) => {
     const authdata = useContext(AuthContext);
+ const [employees, setEmployees] = useState(authdata.employeesData);
+
+
+useEffect(() => {
+        // Re-fetch from context or localStorage when refresh changes
+        setEmployees([...authdata.employeesData]);
+    }, [refresh, authdata.employeesData]);
+
 
     return (
         <div className='bg-white/5 backdrop-blur-lg rounded-2xl border border-white/10 overflow-hidden'>
@@ -179,7 +187,7 @@ const AllTasks = () => {
                             </span>
                         </div>
                     </div>
-                </div>
+                </div> 
             </div>
         </div>
     );

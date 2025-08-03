@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const CreateTask = () => {
+const CreateTask = ({ onTaskCreated }) => {
     const [title, settitle] = useState('');
     const [date, setDate] = useState('');   
     const [Description, setDescription] = useState('');
@@ -35,6 +35,9 @@ const CreateTask = () => {
         setDescription('')
         setcategory('')
         setAssignto('')
+
+        // Notify parent to refresh AllTasks
+        if (onTaskCreated) onTaskCreated();
     }
 
     return (
