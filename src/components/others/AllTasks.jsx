@@ -1,15 +1,10 @@
 import React, { useContext ,useState,useEffect} from 'react';
 import { AuthContext } from '../../context/AuthProvider';
 
-const AllTasks = ({refresh}) => {
+const AllTasks = () => {
     const authdata = useContext(AuthContext);
- const [employees, setEmployees] = useState(authdata.employeesData);
+ const [employees, setEmployees] = useState(authdata.userdata.employeesData);
 
-
-useEffect(() => {
-        // Re-fetch from context or localStorage when refresh changes
-        setEmployees([...authdata.employeesData]);
-    }, [refresh, authdata.employeesData]);
 
 
     return (
@@ -58,7 +53,7 @@ useEffect(() => {
 
             {/* Table Body */}
             <div className='max-h-96 overflow-y-auto'>
-                {authdata.employeesData.map((emp, idx) => {
+                {employees.map((emp, idx) => {
                     const totalTasks = emp.taskCount.completed + emp.taskCount.active + emp.taskCount.failed + emp.taskCount.newTask;
                     const completionRate = totalTasks > 0 ? ((emp.taskCount.completed / totalTasks) * 100).toFixed(1) : 0;
                     
@@ -173,14 +168,14 @@ useEffect(() => {
             <div className='bg-white/5 border-t border-white/10 p-4'>
                 <div className='flex flex-col sm:flex-row items-center justify-between gap-4'>
                     <div className='text-sm text-gray-400'>
-                        Total Employees: {authdata.employeesData.length}
+                        Total Employees: {employees.length}
                     </div>
                     <div className='flex items-center gap-4 text-sm'>
                         <div className='flex items-center gap-2'>
                             <div className='w-3 h-3 bg-green-500 rounded-full'></div>
                             <span className='text-gray-300'>High Performers (80%+)</span>
                             <span className='text-green-400 font-semibold'>
-                                {authdata.employeesData.filter(emp => {
+                                {employees.filter(emp => {
                                     const total = emp.taskCount.completed + emp.taskCount.active + emp.taskCount.failed + emp.taskCount.newTask;
                                     return total > 0 && (emp.taskCount.completed / total) >= 0.8;
                                 }).length}

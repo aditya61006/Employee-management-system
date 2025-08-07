@@ -3,13 +3,12 @@ import Login from './components/auth/Login'
 import './App.css'
 import EmployeeDashboard from './components/dashboard/EmployeeDashboard'
 import AdminDashboard from './components/dashboard/AdminDashboard'
-import AllTasks from './components/others/AllTasks'
-import { getLocalStorage, setLocalStorage } from './utils/localStorage'
 import { AuthContext } from './context/AuthProvider'
-
+import Signup from './components/auth/Signup'
 function App() {
   const [User, setUser] = useState(null);
   const [employeeDta, setEmployeeDta] = useState(null);
+    const [showSignup, setShowSignup] = useState(false);
   
 
 useEffect(() => {
@@ -36,11 +35,24 @@ useEffect(() => {
   return (
     <>
       
-      {  !User && <Login value = {{setUser,setEmployeeDta}} /> }
-    
+        {!User && !showSignup && (
+        <Login
+          value={{ setUser, setEmployeeDta }}
+          onShowSignup={() => setShowSignup(true)}
+        />
+      )}
+
+
+      {!User && showSignup && (
+        <Signup onSignupSuccess={() => setShowSignup(false)} />
+      )}
+       
+
        
 { User == "Employee" &&  <EmployeeDashboard employeeDta={employeeDta} setUser = {setUser} /> }
        
+
+
       { User == "Admin"  &&<AdminDashboard setUser = {setUser}   /> }
     
     </>

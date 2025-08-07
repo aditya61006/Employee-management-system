@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { AuthContext } from '../../context/AuthProvider';
+import { useContext } from 'react';
 
 const CreateTask = ({ onTaskCreated }) => {
     const [title, settitle] = useState('');
@@ -7,18 +9,29 @@ const CreateTask = ({ onTaskCreated }) => {
     const [assignto, setAssignto] = useState('');
     const [category, setcategory] = useState('');
     const [task, setTask] = useState({});
-
+    const Authdata = useContext(AuthContext);       
     const submitHandler = (e)=>{
         e.preventDefault()
-        setTask({active:false,category,completed: false,date,Description,failed: false,newTask:true,title})
 
+         const newTask = {
+        active: false,
+        category,
+        completed: false,
+        date,
+        Description,
+        failed: false,
+        newTask: true,
+        title
+    };
+        setTask({active:false,category,completed: false,date,Description,failed: false,newTask:true,title})
+        
         const data = JSON.parse(localStorage.getItem('employees'))
         console.log(data)
         let userexist = false
 
         data.forEach(element => {
              if (assignto.toLowerCase() === (element.name).toLowerCase()) {
-                element.tasks.push(task)
+                element.tasks.push(newTask)
                 element.taskCount.newTask++
                 console.log(element)
                 userexist = true
@@ -37,7 +50,7 @@ const CreateTask = ({ onTaskCreated }) => {
         setAssignto('')
 
         // Notify parent to refresh AllTasks
-        if (onTaskCreated) onTaskCreated();
+        Authdata.setRefresh((r)=>!r)
     }
 
     return (

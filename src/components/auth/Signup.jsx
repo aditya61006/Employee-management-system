@@ -1,59 +1,83 @@
+import React, { useState } from 'react';
 
-
-import React, { useState, useContext, useEffect } from 'react';
-import { AuthContext } from '../../context/AuthProvider';
-
-const Login = ({value,onShowSignup}) => {
-    const {setUser,setEmployeeDta}  = value
+const Signup = ({ onSignupSuccess }) => {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
-    const [email,setEmail] = useState('')
-    const [password,setPassword] = useState('')
-    const authData = useContext(AuthContext);
+    const [error, setError] = useState('');
 
-    const submithandler = (e)=>{
-        e.preventDefault()
+    const handleSignup = (e) => {
+        e.preventDefault();
 
-        if (email == "admin@me.com" && password == "321") {
-            console.log("you are admin")
-            setUser("Admin")
-            localStorage.setItem("logInUser", "Admin")
-        }
-        else  if ( authData.userdata.employeesData.some((emp)=> email == emp.email && password == emp.password)){
-            const employee =  authData.userdata.employeesData.find((emp)=>email == emp.email && emp.password == password )
-            console.log(employee)
-            if (employee) {
-                setUser("Employee")
-                setEmployeeDta(employee)
-                localStorage.setItem("employeedta", JSON.stringify( employee))
-                localStorage.setItem("logInUser","Employee")
-            }
-        }
-        else{
-            alert("Invalid Credentials")
+        // Get employees from localStorage or empty array
+        const employees = JSON.parse(localStorage.getItem('employees')) || [];
+
+        // Check for duplicate email
+        if (employees.some(emp => emp.email === email)) {
+            setError('Email already exists!');
+            return;
         }
 
-        setEmail("")
-        setPassword("")
-    }
+        // Create new employee object
+        const newEmployee = {
+            name,
+            email,
+            password,
+            tasks: [],
+            taskCount: { completed: 0, active: 0, failed: 0, newTask: 0 }
+        };
+
+        // Add to employees array and save
+        employees.push(newEmployee);
+        localStorage.setItem('employees', JSON.stringify(employees));
+
+        // Optionally, you can auto-login or redirect
+        if (onSignupSuccess) onSignupSuccess();
+
+        // Clear form
+        setName('');
+        setEmail('');
+        setPassword('');
+        setError('');
+        alert('Signup successful! You can now log in.');
+    };
 
     return (
         <div className='min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900'>
-            {/* Background Pattern */}
             <div className="absolute inset-0 bg-black opacity-50"></div>
-          
-
             <div className='relative z-10 w-full max-w-md'>
                 <div className='bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10 shadow-2xl animate-fadeInUp'>
                     <div className='text-center mb-8'>
                         <h1 className='text-3xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent mb-2'>
-                            Welcome Back
+                            Create Account
                         </h1>
                         <p className='text-gray-400 text-sm'>
-                            Sign in to access your dashboard
+                            Sign up to join as an employee
                         </p>
                     </div>
-
-                    <form onSubmit={submithandler} className='space-y-6'>
+                    <form onSubmit={handleSignup} className='space-y-6'>
+                        <div className='space-y-2'>
+                            <label htmlFor="name" className='block text-sm font-medium text-gray-300'>
+                                Name
+                            </label>
+                            <div className='relative'>
+                                <input
+                                    id="name"
+                                    type="text"
+                                    value={name}
+                                    onChange={e => setName(e.target.value)}
+                                    required
+                                    className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300'
+                                    placeholder='Enter your name'
+                                />
+                                <div className='absolute inset-y-0 right-0 flex items-center pr-3'>
+                                    <svg className='h-5 w-5 text-gray-400' fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
                         <div className='space-y-2'>
                             <label htmlFor="email" className='block text-sm font-medium text-gray-300'>
                                 Email Address
@@ -63,7 +87,7 @@ const Login = ({value,onShowSignup}) => {
                                     id="email"
                                     type="email"
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    onChange={e => setEmail(e.target.value)}
                                     required
                                     className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300'
                                     placeholder='Enter your email'
@@ -75,7 +99,6 @@ const Login = ({value,onShowSignup}) => {
                                 </div>
                             </div>
                         </div>
-
                         <div className='space-y-2'>
                             <label htmlFor="password" className='block text-sm font-medium text-gray-300'>
                                 Password
@@ -85,7 +108,7 @@ const Login = ({value,onShowSignup}) => {
                                     id="password"
                                     type={showPassword ? "text" : "password"}
                                     value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
+                                    onChange={e => setPassword(e.target.value)}
                                     required
                                     className='w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300'
                                     placeholder='Enter your password'
@@ -94,6 +117,7 @@ const Login = ({value,onShowSignup}) => {
                                     type="button"
                                     className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white transition-colors duration-200"
                                     onClick={() => setShowPassword(!showPassword)}
+                                    tabIndex={-1}
                                 >
                                     {showPassword ? (
                                         <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -108,47 +132,26 @@ const Login = ({value,onShowSignup}) => {
                                 </button>
                             </div>
                         </div>
-
-                        <div className='flex items-center justify-between text-sm'>
-                            <label className='flex items-center space-x-2 text-gray-300'>
-                                <input
-                                    type="checkbox"
-                                    className='rounded  bg-white/5 border-white/10 text-purple-600 focus:ring-purple-500 focus:ring-offset-0'
-                                />
-                                <span>Remember me</span>
-                            </label>
-                            <a href="#" className='text-purple-400 hover:text-purple-300 transition-colors duration-200'>
-                                Forgot password?
-                            </a>
-                        </div>
-
+                        {error && <div className="text-red-400 text-sm">{error}</div>}
                         <button
                             type="submit"
                             className='w-full py-3 px-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold rounded-lg shadow-lg hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-gray-900 transform hover:scale-[1.02] transition-all duration-300'
                         >
-                            Sign In
+                            Sign Up
                         </button>
-
                         <div className='text-center'>
                             <p className='text-gray-400 text-sm'>
-                                Don't have an account?{' '}
-                                <a href="#" 
-                                 onClick={e =>
-                                 {e.preventDefault();
-                                    if (typeof onShowSignup === 'function') onShowSignup();}
-                                } className='text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200'>
-                                    Sign up
+                                Already have an account?{' '}
+                                <a href="#" onClick={onSignupSuccess} className='text-purple-400 hover:text-purple-300 font-medium transition-colors duration-200'>
+                                    Sign in
                                 </a>
                             </p>
                         </div>
                     </form>
-
-                 
-                 
                 </div>
             </div>
         </div>
     );
-}
+};
 
-export default Login;
+export default Signup;

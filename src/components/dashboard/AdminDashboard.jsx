@@ -6,12 +6,8 @@ import AllTasks from '../others/AllTasks';
 import { AuthContext } from '../../context/AuthProvider';
 
 const AdminDashboard = ({setUser}) => {
-    const {adminData} = useContext(AuthContext);
-    const [refresh,setRefresh] = useState(false)
-
-    const handleRefresh = ()=>{
-        setRefresh(r => !r )
-    }
+    const {userdata} = useContext(AuthContext);
+   
 
     return (
         <div className='min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-gray-900'>
@@ -20,9 +16,9 @@ const AdminDashboard = ({setUser}) => {
            
 
             <div className='relative z-10 p-4 lg:p-10 space-y-6'>
-                <Header data={adminData} setUser={setUser} />
-                <CreateTask onTaskCreated={handleRefresh} />
-                <AllTasks refresh = {refresh} />
+                <Header data={userdata.adminData} setUser={setUser} />
+                <CreateTask  />
+                <AllTasks   />
             </div>
         </div>
     );
